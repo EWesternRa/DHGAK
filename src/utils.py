@@ -57,7 +57,7 @@ def load_data(dataset, data_path='datasets'):
         g.graph['label'] = graph_label[i][0]
         g.graph['id'] = i
         
-        # 加入节点
+        # add nodes
         node_indicator = np.where(graph_indicator == i+1)[0]
         node_indicator = node_indicator + 1    # 节点id从1开始
         for node in node_indicator:
@@ -67,7 +67,7 @@ def load_data(dataset, data_path='datasets'):
             if has_attr:
                 g.nodes[node]['attr'] = node_attr[node-1]
         
-        # 加入边
+        # add edges
         while edge_ind < len(adj):
             edge = adj[edge_ind]
             if edge[0] in node_indicator and edge[1] in node_indicator:
@@ -80,10 +80,10 @@ def load_data(dataset, data_path='datasets'):
             else:
                 break
         
-        # 将g 的node id 变为从0开始
+        # relabel to 0
         g = nx.convert_node_labels_to_integers(g, first_label=0)
         if not has_label:
-            # 如果没有节点标签，使用节点度作为标签
+            # if no node labels, use degree
             node_labels = [g.degree[node] for node in g.nodes()]
             nx.set_node_attributes(g, dict(zip(g.nodes(), node_labels)), 'label')
         
